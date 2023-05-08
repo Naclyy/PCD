@@ -1,0 +1,22 @@
+{
+  "menu-items": [
+    {
+      "href": "demo-wallet/loader/",
+      "background_color": "#8782E1",
+      "icon": "fa-solid fa-building-columns fa-4x",
+      "label": "Demo Wallet"
+    },
+    {
+      "href": "demiurge-wallet/loader/",
+      "background_color": "#FAA368",
+      "icon": "fa-solid fa-atom fa-4x",
+      "label": "Demiurge Wallet"
+    },
+    {
+      "href": "clk",
+      "background_color": "#0047AB",
+      "icon": "fa-solid fa-car fa-4x",
+      "label": "CLK"
+    }
+  ]
+}

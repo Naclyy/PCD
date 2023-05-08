@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mercedes CLK Builder</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 24px;
+
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            z-index: 1;
+            position: relative;
+        }
+
+        form {
+            background: transparent !important;
+            width: 80%;
+            margin: 10rem auto 0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #888888;
+            z-index: 1;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        select option {
+            background-color: #214;
+        }
+
+        input[type="text"],
+        select {
+            color: white;
+            background: transparent !important;
+            font-size: 20px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+            background-color: #fe2085;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 50%;
+            font-size: 30px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #214;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #total-price {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        #my-list-btn {
+            font-size: 50px;
+            background: transparent;
+            position: absolute;
+            z-index: 2;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            top: 1rem;
+            left: 1rem;
+        }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+        }
+
+        /* ............................................................... */
+        /* ............................................................... */
+        /* ............................................................... */
+        #retrobg {
+            position: relative;
+            overflow: scroll;
+            height: 100%;
+            color: #a3c;
+            background-color: #000;
+        }
+
+        /* ............................................................... */
+        #retrobg-sky {
+            position: absolute;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            top: 0;
+            width: 100%;
+            height: 55%;
+            background: linear-gradient(#214 75%, #249);
+        }
+
+        /* ............................................................... */
+        #retrobg-sunWrap {
+            position: relative;
+            width: 40%;
+            margin-bottom: -15%;
+        }
+
+        #retrobg-sun {
+            --glow-color: #d44;
+            padding-top: 100%;
+            border-radius: 50%;
+            background-image: linear-gradient(#fcdf11, #ff623f, #fe2085 50%);
+            box-shadow: 0 0 160px 80px var(--glow-color);
+            animation: 2s ease infinite alternate retrobg-sun-glow-anim;
+        }
+
+        .retrobg-shutdown #retrobg-sun {
+            background-image: linear-gradient(#000, #000 40%);
+            --glow-color: #000;
+        }
+
+        @keyframes retrobg-sun-glow-anim {
+            from {
+                box-shadow: 0 0 160px 80px var(--glow-color);
+            }
+
+            to {
+                box-shadow: 0 0 200px 95px var(--glow-color);
+            }
+        }
+
+        /* ............................................................... */
+        #retrobg-stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .retrobg-star {
+            position: absolute;
+            border-radius: 50%;
+            width: 2px;
+            height: 2px;
+            background-color: #fff;
+        }
+
+        /* ............................................................... */
+        #retrobg-mountains {
+            position: absolute;
+            width: 100%;
+            height: 30%;
+        }
+
+        .retrobg-mountain {
+            position: absolute;
+            width: 30%;
+            height: 100%;
+            background-image: linear-gradient(#000 70%, #111 85%, #fff1);
+        }
+
+        #retrobg-mountains-left {
+            left: 0;
+            clip-path: polygon(0% 100%, 0% 55%, 5% 60%, 10% 55%, 20% 50%, 25% 42%, 30% 38%, 33% 35%, 40% 45%, 50% 50%, 60% 70%, 70% 85%, 75% 82%, 80% 91%, 85% 90%, 90% 95%, 95% 98%, 100% 100%);
+        }
+
+        #retrobg-mountains-right {
+            right: 0;
+            clip-path: polygon(0% 100%, 5% 95%, 10% 85%, 15% 87%, 20% 80%, 25% 78%, 30% 65%, 40% 70%, 50% 57%, 60% 53%, 67% 68%, 70% 70%, 75% 66%, 80% 55%, 90% 50%, 95% 60%, 100% 57%, 100% 100%);
+        }
+
+        /* ............................................................... */
+        #retrobg-cityWrap {
+            position: absolute;
+            width: 50%;
+            margin-left: -1%;
+        }
+
+        #retrobg-city {
+            padding-top: 20%;
+        }
+
+        .retrobg-building {
+            position: absolute;
+            width: 5%;
+            height: 100%;
+            bottom: 0;
+            border-radius: 4px 4px 0 0;
+            background-image: linear-gradient(0deg, rgba(17, 17, 34, 0), #112 30px, #000);
+        }
+
+        .retrobg-building:nth-child(odd) {
+            background-image: linear-gradient(0deg, rgba(24, 24, 42, 0), #223 30px, #000);
+        }
+
+        .retrobg-antenna::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            margin-left: calc(-1px - 5%);
+            bottom: 100%;
+            width: 10%;
+            min-width: 2px;
+            height: 33%;
+            background-color: #000;
+        }
+
+        /* ............................................................... */
+        #retrobg-ground {
+            position: absolute;
+            overflow: hidden;
+            width: 100%;
+            height: 45%;
+            bottom: 0;
+            border-top: 2px solid #bf578c;
+            background-color: #000;
+        }
+
+        .retrobg-shutdown #retrobg-ground {
+            border-color: #000;
+        }
+
+        #retrobg-groundShadow {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(#000 0%, transparent);
+        }
+
+        /* ............................................................... */
+        #retrobg-linesWrap {
+            height: 100%;
+            perspective: 1000px;
+            perspective-origin: center top;
+        }
+
+        #retrobg-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-origin: top center;
+            animation: .35s linear infinite retrobg-lines-anim;
+        }
+
+        .retrobg-shutdown #retrobg-lines {
+            animation-duration: 5s;
+        }
+
+        @keyframes retrobg-lines-anim {
+            from {
+                transform: rotateX(84deg) translateY(0);
+            }
+
+            to {
+                transform: rotateX(84deg) translateY(100px);
+            }
+        }
+
+        #retrobg-hlines,
+        #retrobg-vlines {
+            position: absolute;
+            left: calc((900% - 100%) / -2);
+            width: 900%;
+            height: 500%;
+        }
+
+        #retrobg-vlines {
+            display: flex;
+            justify-content: center;
+        }
+
+        .retrobg-hline,
+        .retrobg-vline {
+            width: 100%;
+            height: 100%;
+            background-color: currentColor;
+        }
+
+        .retrobg-hline {
+            height: 3px;
+        }
+
+        .retrobg-vline {
+            width: 3px;
+        }
+
+        .retrobg-hline+.retrobg-hline {
+            margin-top: 98px;
+        }
+
+        .retrobg-vline+.retrobg-vline {
+            margin-left: 48px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="retrobg">
+        <div id="retrobg-sky">
+            <div id="retrobg-stars">
+                <div class="retrobg-star" style="left:  5%; top: 55%; transform: scale( 2 );"></div>
+                <div class="retrobg-star" style="left:  7%; top:  5%; transform: scale( 2 );"></div>
+                <div class="retrobg-star" style="left: 10%; top: 45%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 12%; top: 35%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 15%; top: 39%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 20%; top: 10%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 35%; top: 50%; transform: scale( 2 );"></div>
+                <div class="retrobg-star" style="left: 40%; top: 16%; transform: scale( 2 );"></div>
+                <div class="retrobg-star" style="left: 43%; top: 28%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 45%; top: 30%; transform: scale( 3 );"></div>
+                <div class="retrobg-star" style="left: 55%; top: 18%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 60%; top: 23%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 62%; top: 44%; transform: scale( 2 );"></div>
+                <div class="retrobg-star" style="left: 67%; top: 27%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 75%; top: 10%; transform: scale( 2 );"></div>
+                <div class="retrobg-star" style="left: 80%; top: 25%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 83%; top: 57%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 90%; top: 29%; transform: scale( 2 );"></div>
+                <div class="retrobg-star" style="left: 95%; top:  5%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 96%; top: 72%; transform: scale( 1 );"></div>
+                <div class="retrobg-star" style="left: 98%; top: 70%; transform: scale( 3 );"></div>
+            </div>
+            <div id="retrobg-sunWrap">
+                <div id="retrobg-sun"></div>
+            </div>
+            <div id="retrobg-mountains">
+                <div id="retrobg-mountains-left" class="retrobg-mountain"></div>
+                <div id="retrobg-mountains-right" class="retrobg-mountain"></div>
+            </div>
+            <div id="retrobg-cityWrap">
+                <div id="retrobg-city">
+                    <div style="left:  4.0%; height: 20%; width: 3.0%;" class="retrobg-building"></div>
+                    <div style="left:  6.0%; height: 50%; width: 1.5%;" class="retrobg-building"></div>
+                    <div style="left:  8.0%; height: 25%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 12.0%; height: 30%; width: 3.0%;" class="retrobg-building"></div>
+                    <div style="left: 13.0%; height: 55%; width: 3.0%;" class="retrobg-building retrobg-antenna"></div>
+                    <div style="left: 17.0%; height: 20%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 18.5%; height: 70%; width: 1.5%;" class="retrobg-building"></div>
+                    <div style="left: 20.0%; height: 30%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 21.5%; height: 80%; width: 2.0%;" class="retrobg-building retrobg-antenna"></div>
+                    <div style="left: 25.0%; height: 60%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 28.0%; height: 40%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 30.0%; height: 70%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 35.0%; height: 65%; width: 4.0%;" class="retrobg-building retrobg-antenna"></div>
+                    <div style="left: 38.0%; height: 40%; width: 3.0%;" class="retrobg-building"></div>
+                    <div style="left: 42.0%; height: 60%; width: 2.0%;" class="retrobg-building"></div>
+                    <div style="left: 43.0%; height: 85%; width: 4.0%;" class="retrobg-building retrobg-antenna"></div>
+                    <div style="left: 45.0%; height: 40%; width: 3.0%;" class="retrobg-building"></div>
+                    <div style="left: 48.0%; height: 25%; width: 3.0%;" class="retrobg-building"></div>
+                    <div style="left: 50.0%; height: 80%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 52.0%; height: 32%; width: 5.0%;" class="retrobg-building"></div>
+                    <div style="left: 55.0%; height: 55%; width: 3.0%;" class="retrobg-building retrobg-antenna"></div>
+                    <div style="left: 58.0%; height: 45%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 61.0%; height: 90%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 66.0%; height: 99%; width: 4.0%;" class="retrobg-building retrobg-antenna"></div>
+                    <div style="left: 69.0%; height: 30%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 73.5%; height: 90%; width: 2.0%;" class="retrobg-building"></div>
+                    <div style="left: 72.0%; height: 70%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 75.0%; height: 60%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 80.0%; height: 40%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 83.0%; height: 70%; width: 4.0%;" class="retrobg-building retrobg-antenna"></div>
+                    <div style="left: 87.0%; height: 60%; width: 3.0%;" class="retrobg-building retrobg-antenna"></div>
+                    <div style="left: 93.0%; height: 50%; width: 3.0%;" class="retrobg-building"></div>
+                    <div style="left: 91.0%; height: 30%; width: 4.0%;" class="retrobg-building"></div>
+                    <div style="left: 94.0%; height: 20%; width: 3.0%;" class="retrobg-building"></div>
+                    <div style="left: 98.0%; height: 35%; width: 2.0%;" class="retrobg-building"></div>
+                </div>
+            </div>
+        </div>
+        <div id="retrobg-ground">
+            <div id="retrobg-linesWrap">
+                <div id="retrobg-lines">
+                    <div id="retrobg-vlines">
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                        <div class="retrobg-vline"></div>
+                    </div>
+                    <div id="retrobg-hlines">
+                        <div class="retrobg-hline"></div>
+                        <div class="retrobg-hline"></div>
+                        <div class="retrobg-hline"></div>
+                        <div class="retrobg-hline"></div>
+                        <div class="retrobg-hline"></div>
+                        <div class="retrobg-hline"></div>
+                        <div class="retrobg-hline"></div>
+                        <div class="retrobg-hline"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="retrobg-groundShadow"></div>
+        </div>
+        <div>
+            <button id="my-list-btn" onclick="window.location.href = 'index.html'">🏠</button>
+            <form id="car-builder">
+                <label for="engine-type">Engine Type:</label>
+                <select name="engine-type" id="engine-type">
+                    <option value="1.8 L M271 I4 (petrol)">1.8 L M271 I4 (petrol)</option>
+                    <option value="2.1 L OM646 I4 (diesel)">2.1 L OM646 I4 (diesel)</option>
+                    <option value="2.6 – 3.2 L M112 V6 (petrol)">2.6 – 3.2 L M112 V6 (petrol)</option>
+                    <option value="2.7 L OM612 I5 (diesel)">2.7 L OM612 I5 (diesel)</option>
+                    <option value="3.0 – 3.5 L M272 V6 (petrol)">3.0 – 3.5 L M272 V6 (petrol)</option>
+                    <option value="3.0 L OM642 V6 (diesel)">3.0 L OM642 V6 (diesel)</option>
+                    <option value="5.0 – 5.4 L M113 V8 (petrol)">5.0 – 5.4 L M113 V8 (petrol)</option>
+                    <option value="5.5 L M273 V8 (petrol)">5.5 L M273 V8 (petrol)</option>
+                    <option value="6.2 L M156 V8 (petrol)">6.2 L M156 V8 (petrol)</option>
+                </select>
+
+                <label for="transmission-type">Transmission Type:</label>
+                <select name="transmission-type" id="transmission-type">
+                    <option value="6-speed manual">6-speed manual</option>
+                    <option value="5G-Tronic automatic">5G-Tronic automatic</option>
+                    <option value="7G-Tronic automatic">7G-Tronic automatic (option)</option>
+                </select>
+
+                <label for="package-type">Package Type:</label>
+                <select name="package-type" id="package-type">
+                    <option value="Elegance">Elegance</option>
+                    <option value="Avangarde">Avangarde</option>
+                    <option value="AMG">AMG</option>
+                </select>
+
+                <label for="exterior-color">Exterior Color:</label>
+                <select name="exterior-color" id="exterior-color">
+                    <option value="black">Black</option>
+                    <option value="silver">Silver</option>
+                    <option value="blue">Blue</option>
+                    <option value="red">Red</option>
+                    <option value="white">White</option>
+                    <option value="gray">Gray</option>
+                    <option value="green">Green</option>
+                    <option value="gold">Gold</option>
+                    <option value="beige">Beige</option>
+                    <option value="navy">Navy</option>
+                    <option value="burgundy">Burgundy</option>
+                    <option value="purple">Purple</option>
+                </select>
+
+                <label for="headlights">Headlights:</label>
+                <select name="headlights" id="headlights">
+                    <option value="halogen">Halogen</option>
+                    <option value="xenon">Xenon</option>
+                </select>
+
+                <label for="sunroof">Sunroof:</label>
+                <select name="sunroof" id="sunroof">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+
+                <label for="interior-trim">Interior Trim:</label>
+                <select name="interior-trim" id="interior-trim">
+                    <option value="cloth">Cloth</option>
+                    <option value="leather">Leather</option>
+                </select>
+
+                <label for="heated-seats">Heated Seats:</label>
+                <select name="heated-seats" id="heated-seats">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+
+                <label for="cooled-seats">Cooled Seats:</label>
+                <select name="cooled-seats" id="cooled-seats">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+
+                <label for="park-assistance">Park Assistance:</label>
+                <select name="park-assistance" id="park-assistance">
+                    <option value="none">None</option>
+                    <option value="back">Back</option>
+                    <option value="frontBack">Front + Back</option>
+                </select>
+
+                <label for="sound-system">Sound System:</label>
+                <select name="sound-system" id="sound-system">
+                    <option value="basic">Basic</option>
+                    <option value="premium">Premium</option>
+                </select>
+
+                <input type="submit" value="Add to Cart 🛒">
+
+                <div id="total-price"></div>
+            </form>
+
+            <script>
+                const prices = {
+                    "1.8 L M271 I4 (petrol)": 1500,
+                    "2.1 L OM646 I4 (diesel)": 2000,
+                    "2.6 – 3.2 L M112 V6 (petrol)": 2500,
+                    "2.7 L OM612 I5 (diesel)": 3000,
+                    "3.0 – 3.5 L M272 V6 (petrol)": 3500,
+                    "3.0 L OM642 V6 (diesel)": 4000,
+                    "5.0 – 5.4 L M113 V8 (petrol)": 5000,
+                    "5.5 L M273 V8 (petrol)": 5500,
+                    "6.2 L M156 V8 (petrol)": 6000,
+                    "6-speed manual": 1500,
+                    "5G-Tronic automatic": 2500,
+                    "7G-Tronic automatic": 4000,
+                    "Elegance": 1000,
+                    "Avangarde": 1500,
+                    "AMG": 3000,
+                    "leather": 1000,
+                    "cloth": 500,
+                    "black": 1000,
+                    "red": 2000,
+                    "blue": 3000,
+                    "white": 1000,
+                    "gray": 1500,
+                    "green": 2500,
+                    "gold": 2000,
+                    "beige": 1500,
+                    "navy": 3000,
+                    "burgundy": 2500,
+                    "purple": 3500,
+                    "true": 1500,
+                    "false": 0,
+                    "none": 0,
+                    "back": 1500,
+                    "frontBack": 3000,
+                    "basic": 1000,
+                    "premium": 2500,
+                    "halogen": 500,
+                    "xenon": 2000
+                };
+
+
+                const form = document.getElementById("car-builder");
+                const totalPriceElement = document.getElementById("total-price");
+
+                // Function to update total price
+                function updateTotalPrice() {
+                    const engine = prices[form.elements["engine-type"].value];
+                    const transmission = prices[form.elements["transmission-type"].value];
+                    const package_type = prices[form.elements["package-type"].value];
+                    const headlights = prices[form.elements["headlights"].value];
+                    const heatedSeats = prices[form.elements["heated-seats"].value];
+                    const cooledSeats = prices[form.elements["cooled-seats"].value];
+                    const interiorTrimPrice = prices[form.elements["interior-trim"].value];
+                    const exteriorColorPrice = prices[form.elements["exterior-color"].value];
+                    const sunroofPrice = prices[form.elements["sunroof"].value];
+                    const soundSystemPrice = prices[form.elements["sound-system"].value];
+                    const parkAssistance = prices[form.elements["park-assistance"].value];
+
+                    const totalPrice = engine + interiorTrimPrice + exteriorColorPrice + sunroofPrice + soundSystemPrice + transmission + package_type + headlights + heatedSeats + cooledSeats + parkAssistance;
+                    totalPriceElement.textContent = "Total price: " + `$${totalPrice}`;
+                }
+
+                // Add event listeners to form elements to update total price on change
+                form.elements["engine-type"].addEventListener("change", updateTotalPrice);
+                form.elements["transmission-type"].addEventListener("change", updateTotalPrice);
+                form.elements["package-type"].addEventListener("change", updateTotalPrice);
+                form.elements["headlights"].addEventListener("change", updateTotalPrice);
+                form.elements["heated-seats"].addEventListener("change", updateTotalPrice);
+                form.elements["cooled-seats"].addEventListener("change", updateTotalPrice);
+                form.elements["interior-trim"].addEventListener("change", updateTotalPrice);
+                form.elements["exterior-color"].addEventListener("change", updateTotalPrice);
+                form.elements["sunroof"].addEventListener("change", updateTotalPrice);
+                form.elements["sound-system"].addEventListener("change", updateTotalPrice);
+                form.elements["park-assistance"].addEventListener("change", updateTotalPrice);
+
+                // Initialize total price on page load
+                updateTotalPrice();
+
+                const getTotalPrice = () => {
+                    const engine = prices[form.elements["engine-type"].value];
+                    const transmission = prices[form.elements["transmission-type"].value];
+                    const package_type = prices[form.elements["package-type"].value];
+                    const headlights = prices[form.elements["headlights"].value];
+                    const heatedSeats = prices[form.elements["heated-seats"].value];
+                    const cooledSeats = prices[form.elements["cooled-seats"].value];
+                    const interiorTrimPrice = prices[form.elements["interior-trim"].value];
+                    const exteriorColorPrice = prices[form.elements["exterior-color"].value];
+                    const sunroofPrice = prices[form.elements["sunroof"].value];
+                    const soundSystemPrice = prices[form.elements["sound-system"].value];
+                    const parkAssistance = prices[form.elements["park-assistance"].value];
+
+                    const totalPrice = engine + interiorTrimPrice + exteriorColorPrice + sunroofPrice + soundSystemPrice + transmission + package_type + headlights + heatedSeats + cooledSeats + parkAssistance;
+                    return totalPrice
+                }
+
+
+                form.addEventListener("submit", (event) => {
+                    event.preventDefault();
+
+                    const totalPrice = getTotalPrice();
+                    totalPriceElement.textContent = `$${totalPrice}`;
+
+                    // Construct query string
+                    const engine = form.elements["engine-type"].value;
+                    const transmission = form.elements["transmission-type"].value;
+                    const package_type = form.elements["package-type"].value;
+                    const headlights = form.elements["headlights"].value;
+                    const heatedSeats = form.elements["heated-seats"].value;
+                    const cooledSeats = form.elements["cooled-seats"].value;
+                    const interiorTrimPrice = form.elements["interior-trim"].value;
+                    const exteriorColorPrice = form.elements["exterior-color"].value;
+                    const sunroofPrice = form.elements["sunroof"].value;
+                    const soundSystemPrice = form.elements["sound-system"].value;
+                    const parkAssistance = form.elements["park-assistance"].value;
+
+                    const params = new URLSearchParams({
+                        engine: engine,
+                        transmission: transmission,
+                        package_type: package_type,
+                        headlights: headlights,
+                        heatedSeats: heatedSeats,
+                        cooledSeats: cooledSeats,
+                        interiorTrim: interiorTrimPrice,
+                        exteriorColor: exteriorColorPrice,
+                        sunroof: sunroofPrice,
+                        soundSystem: soundSystemPrice,
+                        parkAssistance: parkAssistance,
+                        totalPrice: totalPrice
+                    });
+
+                    const queryString = '?' + params.toString();
+                    window.location.href = `my-list.html${queryString}`;
+                })
+            </script>
+
+</body>
